@@ -1,59 +1,19 @@
-# BuildMySystem Landing Page
+# Lodha Towers
 
-> **A cinematic, responsive landing page that frames operational complexity as a system ready to be understood and built.**
+> **A visual journey through a new perspective on Mumbai.**
 
-The page combines a full-screen video hero, an animated “Let’s get started” call to action, and an editorial FAQ experience. Its visual direction, **Field Manual Modernism**, pairs graphite cinematic framing with warm drafting-paper surfaces, precise typography, and restrained Route Green connective details.
+## Live experience
 
-| Area | Implementation |
+Visit the live Lodha Towers website at **[lodhatower-5zoacygg.manus.space](https://lodhatower-5zoacygg.manus.space/)**.
+
+| Resource | Link |
 | --- | --- |
-| **Hero** | Autoplaying background video, visual route-line overlays, and a responsive headline. |
-| **Primary action** | The requested animated CTA, which smoothly guides visitors to the FAQ section. |
-| **FAQ** | Keyboard-accessible accordion interactions with concise operational-system answers. |
-| **Visual system** | Space Grotesk and DM Mono typography, generated brand artwork, and responsive layouts. |
+| **Live website** | [https://lodhatower-5zoacygg.manus.space/](https://lodhatower-5zoacygg.manus.space/) |
+| **GitHub repository** | [https://github.com/V3DANT-lab/lodha-towers](https://github.com/V3DANT-lab/lodha-towers) |
 
-## Local development
-
-Install the project dependencies with `pnpm install`, then start the development server with the command below.
-
-```bash
-pnpm dev
-```
-
-The application is built with React, Vite, Tailwind CSS, and Radix UI components. Use the following commands to validate and prepare a production build.
-
-```bash
-pnpm check
-pnpm build
-```
-
-## Live deployment
-
-The production site is available at **[buildmysystem-landing.netlify.app](https://buildmysystem-landing.netlify.app)**. It is deployed on Netlify from the production project directory and is configured as the current public deployment.
-
-| Deployment detail | Value |
-| --- | --- |
-| **Hosting provider** | Netlify |
-| **Production URL** | [https://buildmysystem-landing.netlify.app](https://buildmysystem-landing.netlify.app) |
-| **Site management** | [Open the Netlify project](https://app.netlify.com/projects/buildmysystem-landing) |
-
-## Project structure
-
-| Path | Purpose |
-| --- | --- |
-| `client/src/pages/Home.tsx` | Landing-page composition, hero content, CTA behavior, and FAQ content. |
-| `client/src/index.css` | Global tokens, typography, motion, and the Field Manual Modernism visual system. |
-| `client/index.html` | Page metadata, fonts, and favicon configuration. |
-| `ideas.md` | The approved design direction and brand decisions. |
-
-## Asset note
-
-The hero video and generated visual assets are managed as web assets for this project and referenced from their managed storage paths. When adapting the page to another hosting environment, replace those source URLs with your preferred asset hosting locations.
+The live experience opens in **Daylight** and guides visitors through a fifteen-part visual sequence set in **Mumbai, India**.
 
 ## Author
 
 **Vedu**  
 Sales & Marketing
-
----
-
-Built for **BuildMySystem**.
