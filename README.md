@@ -15,6 +15,20 @@ The link has been verified to load the active Lodha Towers Daylight sequence.
 
 The live experience opens in **Daylight** and guides visitors through a fifteen-part visual sequence set in **Mumbai, India**.
 
+## High-resolution frame upgrade
+
+The repository now includes a deployable high-resolution version of the visual sequence in `hires-deployment/`.
+
+| Asset | Details |
+| --- | --- |
+| **Enhanced sequence** | 150 JPEG frames, preserved in their original `frame-001.jpg` to `frame-150.jpg` order. |
+| **Standard frame resolution** | `1280 × 720` → `2560 × 1440` (2×). |
+| **Final frame resolution** | `1088 × 832` → `2176 × 1664` (2×). |
+| **Frame archive** | `hires-deployment/assets/lodha-towers-150-frames-hires.zip` |
+| **Deployable entry point** | `hires-deployment/index.html` |
+
+The static build preserves the scroll-controlled canvas experience and redirects its frame loader to the included high-resolution archive.
+
 ## Author
 
 **Vedu**  
