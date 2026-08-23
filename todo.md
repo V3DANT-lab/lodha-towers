@@ -11,4 +11,4 @@
 - [x] Redeploy the complete Netlify bundle and verify the live page and media responses.
 - [x] Inspect the public V3DANT-lab/lodha-towers repository destination and local source state.
 - [x] Prepare the existing website source and metadata for V3DANT-lab/lodha-towers.
-- [ ] Create V3DANT-lab/lodha-towers, push the website source, and verify the repository URL.
+- [x] Create V3DANT-lab/lodha-towers, push the website source, and verify the repository URL.
