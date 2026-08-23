@@ -6,6 +6,8 @@
 
 Visit the live Lodha Towers website at **[lodhatower-5zoacygg.manus.space](https://lodhatower-5zoacygg.manus.space/)**.
 
+The link has been verified to load the active Lodha Towers Daylight sequence.
+
 | Resource | Link |
 | --- | --- |
 | **Live website** | [https://lodhatower-5zoacygg.manus.space/](https://lodhatower-5zoacygg.manus.space/) |
