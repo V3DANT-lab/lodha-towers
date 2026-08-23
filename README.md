@@ -33,6 +33,20 @@ The static build preserves the scroll-controlled canvas experience and redirects
 
 The dedicated Netlify deployment has been verified to request the high-resolution archive from the repository’s public GitHub asset URL.
 
+## Recreated supplied-frame scroll experience
+
+The current deployment has been rebuilt from the two supplied Lodha Towers frame archives and keeps the reference’s fifteen editorial title stages, including `A new perspective / on Mumbai` and `Lodha Towers / Mumbai`.
+
+| Capability | Implementation |
+| --- | --- |
+| **Desktop visual sequence** | 150 user-supplied architectural frames in a 16:9 daylight ascent. |
+| **Mobile visual sequence** | 151 user-supplied golden-hour frames selected for portrait viewports. |
+| **Preload state** | A visible percentage and decoded-frame counter track actual archive unpacking and image decoding. |
+| **Scroll pacing** | A shorter `390vh` desktop scroll track and a `0.42` interpolation response make frame advancement rapid while retaining a smooth cinematic transition. |
+| **Production frame delivery** | Optimized WebP frame archives in `frame-archives/`, loaded by the production canvas through public GitHub URLs. |
+
+The recreated experience is live at [lodha-towers-hires.netlify.app](https://lodha-towers-hires.netlify.app).
+
 ## Author
 
 **Vedu**  
