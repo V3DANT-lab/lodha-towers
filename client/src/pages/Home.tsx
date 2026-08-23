@@ -1,257 +1,226 @@
-/* Design direction: Field Manual Modernism — a cinematic systems cover flows into an asymmetric, paper-toned technical field guide. */
-import {
-  ArrowDown,
-  ArrowUpRight,
-  CircleDot,
-  CornerDownRight,
-  MoveUpRight,
-} from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+/* Design direction: Architectural Film Strip — a transparent editorial overlay rides a rapid, full-viewport Lodha Towers frame sequence. */
+import { useCallback, useEffect, useRef, useState } from "react";
+import { unzipSync } from "fflate";
 
-const faqs = [
-  {
-    question: "What does BuildMySystem help a team do?",
-    answer:
-      "We help teams see their operating model as one connected system—then shape the tools, workflows, and decision paths that make it easier to run and improve.",
-  },
-  {
-    question: "Where do we begin if our work feels fragmented?",
-    answer:
-      "Start with the friction you already know. We map the handoffs, information gaps, and recurring workarounds first, then turn that view into a focused build plan.",
-  },
-  {
-    question: "Do you only work with a particular platform?",
-    answer:
-      "No. The system comes before the software. We work from your current operating context and recommend a practical combination of processes, integrations, and tools.",
-  },
-  {
-    question: "How involved does our internal team need to be?",
-    answer:
-      "Your team brings the operational knowledge; we bring the structure and momentum. We use focused working sessions so decisions stay close to the people who use the system every day.",
-  },
-];
-
-const assets = {
-  heroPoster: "/media/buildmysystem-hero-poster.jpg",
-  heroVideo: "/media/buildmysystem-hero-video.mp4",
-  mark: "/media/buildmysystem-mark.png",
-  faqTexture: "/media/buildmysystem-faq-texture.jpg",
-  faqSculpture: "/media/buildmysystem-faq-sculpture.jpg",
+const FRAME_ARCHIVES = {
+  landscape: "https://raw.githubusercontent.com/V3DANT-lab/lodha-towers/main/frame-archives/lodha-towers-daylight-webp-frames.zip",
+  portrait: "https://raw.githubusercontent.com/V3DANT-lab/lodha-towers/main/frame-archives/lodha-towers-golden-hour-webp-frames.zip",
 };
 
-const managedAssets = {
-  heroVideo: "/manus-storage/buildmysystem-hero-video_ddc0ffd6.mp4",
-  mark: "/manus-storage/buildmysystem-mark_79a02e76.png",
-  faqTexture: "/manus-storage/buildmysystem-faq-texture_977e0a0e.jpg",
-  faqSculpture: "/manus-storage/buildmysystem-faq-sculpture_445b9413.jpg",
+const STAGES = [
+  ["A new perspective", "on Mumbai"],
+  ["Lodha", "Towers"],
+  ["Where form meets", "the horizon"],
+  ["Designed to rise", "above the ordinary"],
+  ["An icon", "in motion"],
+  ["Architecture,", "composed in light"],
+  ["A city", "above the city"],
+  ["Space to pause.", "Space to belong."],
+  ["Elevated living,", "in the heart of Mumbai"],
+  ["The skyline,", "reimagined"],
+  ["As day", "becomes night"],
+  ["Mumbai,", "illuminated"],
+  ["A presence that defines", "the horizon"],
+  ["Live above", "the ordinary"],
+  ["Lodha Towers,", "Mumbai"],
+];
+
+const decodeImage = (source: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("A frame could not be decoded."));
+    image.src = source;
+  });
+
+const drawFrame = (canvas: HTMLCanvasElement, image: HTMLImageElement) => {
+  const context = canvas.getContext("2d");
+  if (!context) return;
+
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  const width = Math.max(1, Math.round(window.innerWidth * ratio));
+  const height = Math.max(1, Math.round(window.innerHeight * ratio));
+
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  const sourceRatio = image.naturalWidth / image.naturalHeight;
+  const canvasRatio = width / height;
+  const drawWidth = sourceRatio > canvasRatio ? height * sourceRatio : width;
+  const drawHeight = sourceRatio > canvasRatio ? height : width / sourceRatio;
+  const x = (width - drawWidth) / 2;
+  const y = (height - drawHeight) / 2;
+
+  context.clearRect(0, 0, width, height);
+  context.drawImage(image, x, y, drawWidth, drawHeight);
 };
 
 export default function Home() {
-  const moveToFaq = () => {
-    document.getElementById("faq")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const framesRef = useRef<HTMLImageElement[]>([]);
+  const urlsRef = useRef<string[]>([]);
+  const targetFrameRef = useRef(0);
+  const renderedFrameRef = useRef(0);
+  const animationRef = useRef<number | null>(null);
+
+  const [progress, setProgress] = useState(0);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [frameCount, setFrameCount] = useState(0);
+  const [status, setStatus] = useState("Preparing the frame study");
+  const [ready, setReady] = useState(false);
+  const [error, setError] = useState(false);
+
+  const renderCurrentFrame = useCallback((index: number) => {
+    const canvas = canvasRef.current;
+    const image = framesRef.current[index];
+    if (canvas && image) drawFrame(canvas, image);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const isPortrait = window.matchMedia("(max-width: 760px), (orientation: portrait)").matches;
+    const archiveUrl = isPortrait ? FRAME_ARCHIVES.portrait : FRAME_ARCHIVES.landscape;
+
+    const loadFrames = async () => {
+      try {
+        setStatus("Receiving the architecture");
+        const response = await fetch(archiveUrl);
+        if (!response.ok) throw new Error("The frame archive is unavailable.");
+
+        setStatus("Unspooling the visual sequence");
+        const archive = unzipSync(new Uint8Array(await response.arrayBuffer()));
+        const files = Object.entries(archive)
+          .filter(([name]) => name.toLowerCase().endsWith(".webp"))
+          .sort(([first], [second]) => first.localeCompare(second, undefined, { numeric: true }));
+
+        if (!files.length) throw new Error("No PNG frames were found in the archive.");
+        if (cancelled) return;
+
+        setFrameCount(files.length);
+        setStatus("Preloading every viewpoint");
+
+        for (let index = 0; index < files.length; index += 1) {
+          const [, bytes] = files[index];
+          const objectUrl = URL.createObjectURL(new Blob([bytes], { type: "image/webp" }));
+          urlsRef.current.push(objectUrl);
+          const image = await decodeImage(objectUrl);
+          framesRef.current.push(image);
+          if (cancelled) return;
+          setLoadedCount(index + 1);
+        }
+
+        if (!cancelled) {
+          renderCurrentFrame(0);
+          setStatus("Sequence ready");
+          window.setTimeout(() => setReady(true), 420);
+        }
+      } catch (loadError) {
+        console.error(loadError);
+        if (!cancelled) setError(true);
+      }
+    };
+
+    loadFrames();
+    return () => {
+      cancelled = true;
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      urlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+      urlsRef.current = [];
+      framesRef.current = [];
+    };
+  }, [renderCurrentFrame]);
+
+  useEffect(() => {
+    if (!ready || !frameCount) return;
+
+    const updateScroll = () => {
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const nextProgress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      targetFrameRef.current = nextProgress * (frameCount - 1);
+      setProgress(nextProgress);
+    };
+
+    const resizeCanvas = () => renderCurrentFrame(Math.round(renderedFrameRef.current));
+
+    const render = () => {
+      const delta = targetFrameRef.current - renderedFrameRef.current;
+      renderedFrameRef.current += delta * 0.42;
+      if (Math.abs(delta) < 0.12) renderedFrameRef.current = targetFrameRef.current;
+      renderCurrentFrame(Math.round(renderedFrameRef.current));
+      animationRef.current = requestAnimationFrame(render);
+    };
+
+    updateScroll();
+    window.addEventListener("scroll", updateScroll, { passive: true });
+    window.addEventListener("resize", resizeCanvas);
+    animationRef.current = requestAnimationFrame(render);
+
+    return () => {
+      window.removeEventListener("scroll", updateScroll);
+      window.removeEventListener("resize", resizeCanvas);
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [frameCount, ready, renderCurrentFrame]);
+
+  const stageIndex = Math.min(STAGES.length - 1, Math.floor(progress * STAGES.length));
+  const stage = STAGES[stageIndex];
+  const frameNumber = Math.min(frameCount, Math.max(1, Math.round(progress * Math.max(0, frameCount - 1)) + 1));
+  const loadPercent = frameCount ? Math.round((loadedCount / frameCount) * 100) : 0;
 
   return (
-    <main className="overflow-hidden bg-[#f2f2ec] text-[#0e1411]">
-      <section className="relative isolate flex min-h-[100svh] overflow-hidden bg-[#050707] px-5 py-6 text-white sm:px-8 lg:px-12">
-        <video
-          className="absolute inset-0 -z-30 h-full w-full object-cover opacity-50 grayscale-[18%]"
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster={assets.heroPoster}
-          aria-label="Abstract systems visualization"
-        >
-          <source src={assets.heroVideo} type="video/mp4" />
-          <source src={managedAssets.heroVideo} type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 -z-20 bg-[#020505]/58" />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(2,5,5,0.98)_0%,rgba(2,5,5,0.84)_42%,rgba(2,5,5,0.38)_78%,rgba(2,5,5,0.66)_100%)]" />
-        <div className="pointer-events-none absolute -bottom-28 -left-20 -z-10 h-96 w-96 rounded-full border border-[#d5ff53]/20" />
-        <div className="pointer-events-none absolute -bottom-16 -left-8 -z-10 h-72 w-72 rounded-full border border-white/10" />
-        <div className="pointer-events-none absolute right-[10%] top-[18%] -z-10 hidden h-[28rem] w-[28rem] rounded-full border border-[#d5ff53]/15 lg:block" />
-        <div className="pointer-events-none absolute right-[17%] top-[26%] -z-10 hidden h-[16rem] w-[16rem] rounded-full border border-white/10 lg:block" />
-        <div className="pointer-events-none absolute right-[18%] top-[27%] -z-10 hidden h-[8rem] w-[8rem] rounded-full border border-[#d5ff53]/35 lg:block" />
+    <main className="lodha-experience">
+      <div className="lodha-viewport" aria-hidden={!ready}>
+        <canvas ref={canvasRef} className="lodha-canvas" aria-label="Scroll-controlled Lodha Towers architectural sequence" />
+        <div className="lodha-scrim" />
 
-        <div className="mx-auto flex min-h-[calc(100svh-3rem)] w-full max-w-[1440px] flex-col">
-          <header className="hero-reveal relative flex items-center justify-between gap-5 py-3 [animation-delay:60ms]">
-            <a href="#top" className="group flex items-center gap-3" aria-label="BuildMySystem home">
-              <span className="flex h-11 w-11 items-center justify-center rounded-[0.85rem] bg-[#d5ff53] p-2 shadow-[0_0_40px_rgba(213,255,83,0.13)] transition-transform duration-300 ease-out group-hover:-rotate-6">
-                <img
-                  src={assets.mark}
-                  onError={(event) => {
-                    event.currentTarget.onerror = null;
-                    event.currentTarget.src = managedAssets.mark;
-                  }}
-                  alt=""
-                  className="h-full w-full object-contain"
-                />
-              </span>
-              <span className="font-[Space_Grotesk] text-[0.7rem] font-semibold tracking-[0.18em] text-white sm:text-xs">
-                BUILDMYSYSTEM
-              </span>
-            </a>
-            <a
-              href="#faq"
-              className="group hidden items-center gap-2 font-[DM_Mono] text-[0.62rem] tracking-[0.16em] text-white/70 transition-colors hover:text-[#d5ff53] sm:flex"
-            >
-              FIELD NOTES <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-1" />
-            </a>
-          </header>
+        <header className="lodha-header">
+          <button className="lodha-wordmark" type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <span className="lodha-wordmark-mark" aria-hidden="true" />
+            <span>Lodha <em>Towers</em></span>
+          </button>
+          <span className="lodha-location">Mumbai · India</span>
+        </header>
 
-          <div id="top" className="relative flex flex-1 items-center py-16 sm:py-20 lg:py-24">
-            <div className="max-w-[62rem]">
-              <div className="hero-reveal mb-7 flex items-center gap-3 font-[DM_Mono] text-[0.62rem] font-medium tracking-[0.19em] text-[#d5ff53] [animation-delay:120ms] sm:text-[0.68rem]">
-                <span className="h-px w-9 bg-[#d5ff53]" />
-                OPERATIONS, MADE COHERENT
-              </div>
-              <h1 className="hero-reveal max-w-[1050px] font-[Space_Grotesk] text-[clamp(2.2rem,10vw,3.7rem)] font-semibold leading-[0.82] tracking-[-0.075em] [animation-delay:190ms] sm:text-[clamp(4.2rem,10vw,9.8rem)]">
-                WELCOME TO
-                <span className="block">BUILDMYSYSTEM</span>
-              </h1>
-              <div className="hero-reveal mt-9 flex flex-col items-start gap-8 [animation-delay:270ms] sm:mt-11 sm:flex-row sm:items-center">
-                <div className="flex flex-col items-start gap-5">
-                  <p className="max-w-[21rem] border-l border-[#d5ff53] pl-4 font-[Space_Grotesk] text-base leading-relaxed text-white/83 sm:text-lg">
-                    Bring the moving parts into <span className="text-[#d5ff53]">view.</span>
-                  </p>
-                  <button
-                    type="button"
-                    onClick={moveToFaq}
-                    className="group relative inline-block cursor-pointer rounded-xl bg-zinc-800 p-px font-semibold leading-6 text-white shadow-2xl shadow-black/40 transition-transform duration-300 ease-out hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d5ff53]"
-                  >
-                    <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                    <span className="relative z-10 block rounded-xl bg-[#080b0a] px-5 py-3.5 sm:px-6">
-                      <span className="relative z-10 flex items-center gap-2 font-[Space_Grotesk] text-[0.95rem]">
-                        <span className="transition-transform duration-500 group-hover:translate-x-1">Let&apos;s get started</span>
-                        <svg
-                          className="h-5 w-5 transition-transform duration-500 group-hover:translate-x-1"
-                          aria-hidden="true"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            clipRule="evenodd"
-                            d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
-                            fillRule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <aside className="lodha-rail" aria-hidden="true">
+          <span>01</span>
+          <span className="lodha-rail-line"><i style={{ transform: `scaleY(${Math.max(0.03, progress)})` }} /></span>
+          <span>15</span>
+        </aside>
 
-          <div className="hero-reveal flex items-end justify-between gap-6 pb-1 [animation-delay:350ms]">
-            <div className="hidden max-w-[15rem] gap-3 lg:flex">
-              <CircleDot className="mt-0.5 h-4 w-4 shrink-0 text-[#d5ff53]" />
-              <p className="font-[DM_Mono] text-[0.62rem] leading-relaxed tracking-[0.08em] text-white/52">
-                MAP THE MOVING PARTS. BUILD THE OPERATING LAYER.
-              </p>
-            </div>
-            <a
-              href="#faq"
-              className="ml-auto flex items-center gap-3 font-[DM_Mono] text-[0.61rem] tracking-[0.16em] text-white/65 transition-colors hover:text-white"
-            >
-              SCROLL TO EXPLORE
-              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/22">
-                <ArrowDown className="h-4 w-4" />
-              </span>
-            </a>
-          </div>
+        <section className="lodha-copy" key={stageIndex}>
+          <p className="lodha-eyebrow">{String(stageIndex + 1).padStart(2, "0")} — Daylight</p>
+          <h1>
+            <span>{stage[0]}</span>
+            <em>{stage[1]}</em>
+          </h1>
+        </section>
+
+        <div className="lodha-index" aria-label={`Chapter ${stageIndex + 1} of ${STAGES.length}`}>
+          <span>{String(stageIndex + 1).padStart(2, "0")}</span>
+          <span>{String(STAGES.length).padStart(2, "0")}</span>
         </div>
-      </section>
 
-      <section id="faq" className="relative isolate overflow-hidden bg-[#f2f2ec] px-5 py-24 sm:px-8 sm:py-32 lg:px-12 lg:py-40">
-        <img
-          src={assets.faqTexture}
-          onError={(event) => {
-            event.currentTarget.onerror = null;
-            event.currentTarget.src = managedAssets.faqTexture;
-          }}
-          alt=""
-          className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover opacity-[0.13] mix-blend-multiply"
-        />
-        <div className="pointer-events-none absolute -right-40 top-28 -z-10 h-[34rem] w-[34rem] rounded-full border border-[#0e1411]/[0.11]" />
-        <div className="pointer-events-none absolute -right-12 top-52 -z-10 h-80 w-80 rounded-full border border-[#0e1411]/[0.07]" />
+        <div className="lodha-frame-readout">
+          <span>Daylight</span>
+          <span>{String(frameNumber).padStart(3, "0")} / {String(frameCount || 150).padStart(3, "0")}</span>
+        </div>
+      </div>
 
-        <div className="mx-auto grid w-full max-w-[1440px] gap-16 lg:grid-cols-[minmax(19rem,0.78fr)_minmax(31rem,1.22fr)] lg:gap-24">
-          <div className="lg:sticky lg:top-10 lg:self-start">
-            <div className="flex items-center gap-3 font-[DM_Mono] text-[0.64rem] font-medium tracking-[0.18em] text-[#315543]">
-              <span className="h-px w-9 bg-[#315543]" />
-              FAQ / 01—04
-            </div>
-            <h2 className="mt-7 max-w-[28rem] font-[Space_Grotesk] text-[clamp(3rem,5vw,5.6rem)] font-semibold leading-[0.9] tracking-[-0.065em] text-[#101611]">
-              CLEAR PATHS<br />
-              FOR <span className="text-[#447255]">COMPLEX</span><br />
-              WORK.
-            </h2>
-            <p className="mt-7 max-w-sm font-[Space_Grotesk] text-base leading-relaxed text-[#425048]">
-              A few practical answers before we begin mapping the work together.
-            </p>
-            <div className="relative mt-12 max-w-[20rem] overflow-hidden rounded-[1.45rem] bg-[#dce3d8] shadow-[0_24px_55px_rgba(18,32,23,0.12)]">
-              <img
-                src={assets.faqSculpture}
-                onError={(event) => {
-                  event.currentTarget.onerror = null;
-                  event.currentTarget.src = managedAssets.faqSculpture;
-                }}
-                alt="Abstract connected modular forms"
-                className="block w-full mix-blend-multiply"
-              />
-              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between border-t border-[#101611]/10 bg-[#f5f6f0]/76 px-4 py-3 backdrop-blur-sm">
-                <span className="font-[DM_Mono] text-[0.56rem] tracking-[0.14em] text-[#315543]">SYSTEM SPECIMEN / 01</span>
-                <MoveUpRight className="h-3.5 w-3.5 text-[#315543]" />
-              </div>
-            </div>
-          </div>
+      <div className="lodha-scroll-track" aria-hidden="true" />
 
-          <div className="self-start border-t border-[#101611]/20">
-            <Accordion type="single" collapsible defaultValue="item-0" className="w-full">
-              {faqs.map((faq, index) => (
-                <AccordionItem value={`item-${index}`} key={faq.question} className="border-[#101611]/20 py-1 data-[state=open]:border-[#315543]">
-                  <AccordionTrigger className="group gap-6 py-6 text-left font-[Space_Grotesk] text-xl font-medium leading-snug tracking-[-0.035em] text-[#101611] hover:no-underline data-[state=open]:text-[#315543] sm:py-8 sm:text-[1.62rem]">
-                    <span className="flex min-w-0 items-start gap-4 sm:gap-6">
-                      <span className="mt-1.5 shrink-0 font-[DM_Mono] text-[0.61rem] font-medium tracking-[0.12em] text-[#4d765c]">
-                        0{index + 1}
-                      </span>
-                      <span>{faq.question}</span>
-                    </span>
-                  </AccordionTrigger>
-                  <AccordionContent className="pb-7 pl-[2.6rem] pr-8 font-[Space_Grotesk] text-[0.97rem] leading-relaxed text-[#48564e] sm:pb-9 sm:pl-[3.4rem] sm:text-lg">
-                    <span className="flex gap-3">
-                      <CornerDownRight className="mt-1 h-4 w-4 shrink-0 text-[#4d765c]" />
-                      <span>{faq.answer}</span>
-                    </span>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-
-            <div className="mt-12 flex flex-col justify-between gap-7 border-t border-[#101611]/20 pt-8 sm:flex-row sm:items-end">
-              <p className="max-w-sm font-[DM_Mono] text-[0.64rem] leading-relaxed tracking-[0.08em] text-[#54715f]">
-                HAVE A DIFFERENT QUESTION? START WITH THE PART OF THE WORK THAT ISN&apos;T MOVING YET.
-              </p>
-              <button
-                type="button"
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                className="group inline-flex items-center gap-3 font-[Space_Grotesk] text-sm font-semibold text-[#101611] transition-colors hover:text-[#315543]"
-              >
-                Back to the brief
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d5ff53] transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1">
-                  <ArrowUpRight className="h-4 w-4" />
-                </span>
-              </button>
-            </div>
-          </div>
+      <section className={`lodha-preloader ${ready ? "is-complete" : ""}`} aria-live="polite" aria-busy={!ready}>
+        <div className="lodha-loader-mark"><span /> <strong>Lodha <em>Towers</em></strong></div>
+        <div className="lodha-loader-center">
+          <p>{error ? "Frame archive unavailable" : status}</p>
+          <strong>{error ? "Retry the page" : `${String(loadPercent).padStart(3, "0")}%`}</strong>
+        </div>
+        <div className="lodha-loader-footer">
+          <span>{error ? "Unable to load frames" : `${loadedCount} / ${frameCount || "—"} frames decoded`}</span>
+          <span className="lodha-loader-rule"><i style={{ transform: `scaleX(${loadPercent / 100})` }} /></span>
+          <span>Scroll film / 01</span>
         </div>
       </section>
     </main>

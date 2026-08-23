@@ -1,54 +1,36 @@
-# BuildMySystem Landing Page — Design Direction
+# Lodha Towers — Reference Reconstruction Specification
 
-## Three possible approaches
+## Ground-Truth Reference
 
-| Theme Name | Very Brief Intro | Probability |
-| --- | --- | --- |
-| **Field Manual Modernism** | A dark, cinematic systems field gives way to a warm technical field guide. It balances Swiss typographic rigor with tactile industrial materials. | 0.07 |
-| **Soft Infrastructure** | An airy, gallery-like interpretation of technology with soft daylight, modular paper forms, and quiet editorial typography. | 0.04 |
-| **Signal Workshop** | A warm workshop aesthetic built from chromatic calibration marks, layered drafting textures, and animated tool-like interactions. | 0.09 |
+Recreate the visual language and information hierarchy of `lodhatower-5zoacygg.manus.space` using the user-supplied frame sequences as the canvas source. Fidelity to this reference overrides other page-style directions.
 
-## Chosen Direction — Field Manual Modernism
+## Chosen Approach: Architectural Film Strip
 
-**Design Movement:** Swiss International Style interpreted through contemporary Japanese industrial craft and technical field-manual graphics.
+**Design Movement:** Contemporary luxury architectural editorial, expressed as an immersive full-viewport frame-scroll film rather than a conventional webpage.
 
 **Core Principles:**
 
-1. **Purposeful contrast:** A low-key, cinematic hero establishes focus; the FAQ resolves into an open, readable technical field.
-2. **Measured materiality:** Hairline rules, blueprint traces, matte graphite, and a limited luminous accent make the interface feel engineered rather than decorative.
-3. **Asymmetric hierarchy:** Large type and the FAQ artwork sit on offset vertical axes, giving the two-section composition direction without relying on a centered card grid.
-4. **Quiet precision:** Every detail is legible, restrained, and functional; visual effects clarify focus rather than add noise.
+1. The supplied architecture is the hero; typography remains light, sparse, and secondary.
+2. The page is a single cinematic scroll sequence, not a collection of independently styled sections.
+3. Motion feels immediate and rapid: small scroll gestures advance the visual journey decisively.
+4. The loading state clearly communicates that the frame sequence is being prepared.
 
-**Color Philosophy:** The dark hero uses charcoal and ink as a calm environment for a bright emerald signal, which represents a viable route through operational complexity. The FAQ uses warm drafting-paper neutrals to make inquiry feel candid and accessible. The signature emerald appears sparingly, only on active, connective, or forward-moving elements.
+**Color Philosophy:** The interface stays nearly transparent over the supplied architectural imagery, using white for primary labels, warm ivory for display text, and muted gold for the second line of each title. Overlays are restrained charcoal gradients only where required for text legibility.
 
-**Layout Paradigm:** A cinematic, full-viewport “cover page” transforms into a split field-manual spread. The hero’s content is anchored on the left with small peripheral annotations; the FAQ becomes a wide editorial column paired with a sticky visual specimen, not a centrally stacked FAQ card.
+**Layout Paradigm:** A sticky full-viewport canvas occupies the entire visual field while a tall invisible scroll track maps page progress to a frame index. Editorial metadata sits at the perimeter; the title is offset from the left rather than conventionally centered.
 
-**Signature Elements:**
+**Signature Elements:** A thin numbered progress rail, a compact `01 / 15` chapter index, and a serif italic title treatment with a gold second line.
 
-1. The **emerald route line**, a small directional visual cue beside active interface states.
-2. **Technical hairlines and crosshair labels**, used as quiet framing devices.
-3. **Modular material specimens**, represented by the generated sculptural FAQ image and reduced geometric shapes.
+**Interaction Philosophy:** Scrolling is the primary control. The wordmark button returns the viewer to the beginning; no other interface competes with the experience.
 
-**Interaction Philosophy:** Interactions should feel like working with a well-designed instrument: immediate, deliberate, and informative. The CTA’s gradient signal only appears when invited by hover; FAQ rows open with short, controlled disclosure motion.
+**Animation:** Use only opacity and transform for interface transitions. The preloader’s percentage advances with the real decoded-frame count. Scroll-to-frame mapping is deliberately fast, with a short smoothing factor that retains a cinematic response.
 
-**Animation:** Hero annotations and content use restrained opacity-and-translate entrance motion. The CTA scales subtly on hover and press; its color route fades in within 260–500ms. FAQ rows use transform and opacity only, with all nonessential motion disabled under `prefers-reduced-motion`.
+**Typography System:** `DM Serif Display` carries the literary architectural titles; `Manrope` supports compact body labels; `IBM Plex Mono` is reserved for frame, chapter, and preload metadata.
 
-**Typography System:** **Space Grotesk** carries headline geometry and compact navigation; **DM Mono** provides technical labels, metadata, and the FAQ indicator. Headlines are large, tightly tracked, uppercase, and left-aligned. Body text stays airy and sentence case for clarity.
+**Brand Essence:** Lodha Towers is an immersive architectural perspective on Mumbai for viewers who want to inhabit a skyline before they visit it. **Elevated, cinematic, precise.**
 
-**Brand Essence:** **BuildMySystem turns operational complexity into tangible, connected systems for teams ready to build with intent.** Personality: **precise, composed, catalytic**.
+**Brand Voice:** Headlines are spare and editorial; metadata is factual and quiet. Example lines: `A new perspective / on Mumbai` and `Daylight — 001 / 150`.
 
-**Brand Voice:** Headline language is confident and concrete; CTAs invite purposeful movement rather than make generic promises. Microcopy reads like a well-edited engineering note.
+**Wordmark & Logo:** A compact `Lodha Towers` typographic wordmark with a fine architectural line marker, placed in the upper-left corner at a useful viewing size.
 
-> “Bring the moving parts into view.”
->
-> “Start with the system you already have.”
-
-**Wordmark & Logo:** The wordmark uses spaced, geometric uppercase lettering, paired with a compact interlocking-route symbol whose central node suggests a system made coherent.
-
-**Signature Brand Color:** **Route Green — #D5FF53.**
-
-## Style Decisions
-
-- **Hero copy voice:** The required “WELCOME TO BUILDMYSYSTEM” headline remains as a user-mandated identifier, while the supporting systems thesis carries the primary field-manual tone: “Bring the moving parts into view.”
-- **Route Green rule:** #D5FF53 appears only on the logo signal, directional and connective marks, active interface states, CTAs, and one supporting key phrase at a time—never as a large decorative color fill.
-- **Imagery rule:** The supplied video remains the required hero background. Its hardware-specific cues are softened with a dark field overlay and an abstract route layer, so the overall image reads as a systems field rather than a consumer-hardware product page.
+**Signature Brand Color:** **Horizon Gold — #C9A676** — used only to underscore the second line of the cinematic title.

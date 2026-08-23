@@ -14,3 +14,23 @@
 - [x] Create V3DANT-lab/lodha-towers, push the website source, and verify the repository URL.
 - [x] Replace the Lodha Towers repository README with the current project documentation and live site link.
 - [x] Verify the provided Lodha Towers website link and publish the README update to GitHub.
+- [x] Locate the Lodha Towers frame source and establish the high-resolution replacement workflow.
+- [x] Inspect the confirmed V3DANT-lab/lodha-towers source repository for the canvas implementation and frame manifest.
+- [x] Produce high-resolution frame replacements while preserving the visual sequence.
+- [ ] Integrate the enhanced frames, validate the experience, and redeploy the live website.
+- [ ] Publish the high-resolution source update to GitHub and verify both public links.
+- [x] Extract the deployed 150-frame Lodha Towers sequence from its public archive.
+- [x] Create high-resolution frame assets while preserving each original image.
+- [x] Validate and package the enhanced frame sequence for later integration.
+- [ ] Add the complete high-resolution frame package and revised README to the Lodha Towers GitHub repository.
+- [ ] Build a deployable Lodha Towers static site that loads the high-resolution frame archive.
+- [ ] Publish and verify the updated high-resolution live website link.
+- [ ] Create a dedicated Netlify site for the standalone high-resolution Lodha Towers build.
+- [ ] Deploy the high-resolution static build and verify the new public frame archive URL.
+- [ ] Identify the supplied Lodha Towers architectural image reference for the drone-video motion path.
+- [ ] Generate a 10-second 1080p 16:9 cinematic drone-flight video with multiple turns and no visible drone.
+- [ ] Validate the video’s duration, framing, architectural-line movement, and drone invisibility.
+- [x] Inspect both supplied PNG frame archives and map their ordered sequence.
+- [x] Rebuild the Lodha Towers canvas-scroll experience with the same text narrative and supplied frames.
+- [x] Add rapid scroll-to-frame progression and an accessible frame preloader.
+- [x] Validate the reconstructed sequence across desktop and mobile, then deploy and publish the source update.

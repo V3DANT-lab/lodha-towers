@@ -1,190 +1,71 @@
-/* Design direction: Field Manual Modernism — technical paper, graphite fields, sharp typography, and sparse Route Green signals. */
+/* Design direction: Architectural Film Strip — transparent editorial text on a rapid, immersive Lodha Towers canvas sequence. */
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap");
 @import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
 
 :root {
-  --radius: 0.85rem;
-  --primary: oklch(0.88 0.21 126);
-  --primary-foreground: oklch(0.12 0.012 150);
-  --secondary: oklch(0.92 0.014 134);
-  --secondary-foreground: oklch(0.25 0.025 150);
-  --background: oklch(0.96 0.008 113);
-  --foreground: oklch(0.16 0.016 150);
-  --card: oklch(0.985 0.005 113);
-  --card-foreground: oklch(0.16 0.016 150);
-  --popover: oklch(0.985 0.005 113);
-  --popover-foreground: oklch(0.16 0.016 150);
-  --muted: oklch(0.92 0.008 113);
-  --muted-foreground: oklch(0.43 0.025 150);
-  --accent: oklch(0.9 0.018 132);
-  --accent-foreground: oklch(0.16 0.016 150);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.78 0.015 140);
-  --input: oklch(0.78 0.015 140);
-  --ring: oklch(0.63 0.15 136);
-  --chart-1: oklch(0.88 0.21 126);
-  --chart-2: oklch(0.56 0.09 150);
-  --chart-3: oklch(0.39 0.05 150);
-  --chart-4: oklch(0.23 0.025 150);
-  --chart-5: oklch(0.15 0.017 150);
-  --sidebar: oklch(0.94 0.008 113);
-  --sidebar-foreground: oklch(0.16 0.016 150);
-  --sidebar-primary: oklch(0.88 0.21 126);
-  --sidebar-primary-foreground: oklch(0.12 0.012 150);
-  --sidebar-accent: oklch(0.9 0.018 132);
-  --sidebar-accent-foreground: oklch(0.16 0.016 150);
-  --sidebar-border: oklch(0.78 0.015 140);
-  --sidebar-ring: oklch(0.63 0.15 136);
+  color: #fff;
+  background: #05070a;
+  font-family: "Manrope", sans-serif;
 }
 
-.dark {
-  --primary: oklch(0.88 0.21 126);
-  --primary-foreground: oklch(0.12 0.012 150);
-  --secondary: oklch(0.21 0.02 150);
-  --secondary-foreground: oklch(0.78 0.015 140);
-  --background: oklch(0.12 0.012 150);
-  --foreground: oklch(0.94 0.008 113);
-  --card: oklch(0.16 0.016 150);
-  --card-foreground: oklch(0.94 0.008 113);
-  --popover: oklch(0.16 0.016 150);
-  --popover-foreground: oklch(0.94 0.008 113);
-  --muted: oklch(0.21 0.02 150);
-  --muted-foreground: oklch(0.66 0.019 140);
-  --accent: oklch(0.23 0.026 150);
-  --accent-foreground: oklch(0.94 0.008 113);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 14%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.88 0.21 126);
-  --chart-1: oklch(0.88 0.21 126);
-  --chart-2: oklch(0.69 0.1 143);
-  --chart-3: oklch(0.49 0.06 150);
-  --chart-4: oklch(0.35 0.04 150);
-  --chart-5: oklch(0.25 0.025 150);
-  --sidebar: oklch(0.16 0.016 150);
-  --sidebar-foreground: oklch(0.94 0.008 113);
-  --sidebar-primary: oklch(0.88 0.21 126);
-  --sidebar-primary-foreground: oklch(0.12 0.012 150);
-  --sidebar-accent: oklch(0.23 0.026 150);
-  --sidebar-accent-foreground: oklch(0.94 0.008 113);
-  --sidebar-border: oklch(1 0 0 / 14%);
-  --sidebar-ring: oklch(0.88 0.21 126);
+* { box-sizing: border-box; }
+html { background: #05070a; scroll-behavior: auto; }
+body { margin: 0; min-width: 320px; overflow-x: hidden; background: #05070a; }
+button { font: inherit; }
+
+.lodha-experience { background: #05070a; }
+.lodha-scroll-track { height: 390vh; pointer-events: none; }
+.lodha-viewport { position: fixed; inset: 0; overflow: hidden; background: #05070a; }
+.lodha-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lodha-scrim { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(4,7,10,.42) 0%, rgba(4,7,10,.18) 35%, transparent 62%), linear-gradient(0deg, rgba(4,7,10,.44) 0%, transparent 34%, rgba(4,7,10,.18) 100%); }
+
+.lodha-header { position: absolute; inset: 0 0 auto; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 28px 34px; text-transform: uppercase; letter-spacing: .16em; font: 500 9px/1 "IBM Plex Mono", monospace; }
+.lodha-wordmark { display: inline-flex; align-items: center; gap: 10px; border: 0; padding: 0; color: #fff; background: transparent; cursor: pointer; letter-spacing: .02em; font: 400 18px/1 "DM Serif Display", serif; text-transform: none; }
+.lodha-wordmark em { color: #d8c098; font-style: italic; }
+.lodha-wordmark-mark { width: 19px; height: 19px; border: 1px solid rgba(255,255,255,.8); display: inline-block; transform: rotate(45deg); }
+.lodha-location { color: rgba(255,255,255,.82); }
+
+.lodha-rail { position: absolute; z-index: 2; left: 31px; top: 50%; display: flex; height: min(42vh, 350px); width: 12px; transform: translateY(-50%); flex-direction: column; align-items: center; justify-content: space-between; color: rgba(255,255,255,.7); font: 400 8px/1 "IBM Plex Mono", monospace; }
+.lodha-rail-line { position: relative; width: 1px; flex: 1; margin: 10px 0; overflow: hidden; background: rgba(255,255,255,.35); }
+.lodha-rail-line i { position: absolute; inset: 0; display: block; transform-origin: top; background: #fff; transition: transform 80ms linear; }
+
+.lodha-copy { position: absolute; z-index: 2; left: clamp(76px, 10vw, 158px); top: 56%; max-width: min(700px, 67vw); transform: translateY(-50%); animation: lodha-copy-in 380ms cubic-bezier(.23,1,.32,1); }
+.lodha-eyebrow { margin: 0 0 15px; color: rgba(255,255,255,.78); text-transform: uppercase; letter-spacing: .18em; font: 500 9px/1.3 "IBM Plex Mono", monospace; }
+.lodha-copy h1 { margin: 0; color: #fff; font: 400 clamp(46px, 6.5vw, 102px)/.84 "DM Serif Display", serif; letter-spacing: -.055em; }
+.lodha-copy h1 span, .lodha-copy h1 em { display: block; }
+.lodha-copy h1 em { color: #d6b071; font-style: italic; }
+.lodha-index { position: absolute; z-index: 2; left: 28px; bottom: 32px; display: flex; gap: 3px; font: 400 9px/1 "IBM Plex Mono", monospace; color: rgba(255,255,255,.8); }
+.lodha-index span + span::before { content: "/"; margin-right: 3px; color: rgba(255,255,255,.44); }
+.lodha-frame-readout { position: absolute; z-index: 2; right: 32px; bottom: 32px; display: grid; gap: 5px; text-align: right; color: rgba(255,255,255,.75); font: 400 8px/1 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+
+.lodha-preloader { position: fixed; z-index: 10; inset: 0; display: grid; grid-template-rows: auto 1fr auto; padding: 28px 34px; color: #f7f4ee; background: #07090c; transition: opacity 700ms cubic-bezier(.23,1,.32,1), visibility 700ms; }
+.lodha-preloader.is-complete { opacity: 0; visibility: hidden; pointer-events: none; }
+.lodha-loader-mark { display: flex; align-items: center; gap: 10px; font: 400 18px/1 "DM Serif Display", serif; }
+.lodha-loader-mark span { width: 18px; height: 18px; border: 1px solid rgba(255,255,255,.75); transform: rotate(45deg); }
+.lodha-loader-mark em { color: #d6b071; font-style: italic; }
+.lodha-loader-center { align-self: center; padding-left: clamp(40px, 10vw, 150px); }
+.lodha-loader-center p { margin: 0 0 14px; color: rgba(255,255,255,.58); text-transform: uppercase; letter-spacing: .18em; font: 500 9px/1.3 "IBM Plex Mono", monospace; }
+.lodha-loader-center strong { font: 400 clamp(80px, 16vw, 230px)/.75 "DM Serif Display", serif; letter-spacing: -.07em; }
+.lodha-loader-footer { display: grid; grid-template-columns: auto minmax(80px,1fr) auto; align-items: center; gap: 14px; color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: .11em; font: 400 8px/1 "IBM Plex Mono", monospace; }
+.lodha-loader-rule { height: 1px; overflow: hidden; background: rgba(255,255,255,.22); }
+.lodha-loader-rule i { display: block; height: 100%; transform-origin: left; background: #d6b071; transition: transform 120ms linear; }
+
+@keyframes lodha-copy-in { from { opacity: 0; transform: translateY(calc(-50% + 18px)); } to { opacity: 1; transform: translateY(-50%); } }
+
+@media (max-width: 760px) {
+  .lodha-scroll-track { height: 330vh; }
+  .lodha-header { padding: 22px 18px; }
+  .lodha-location { font-size: 7px; }
+  .lodha-rail { left: 17px; height: 32vh; }
+  .lodha-copy { left: 42px; top: 58%; max-width: calc(100vw - 75px); }
+  .lodha-copy h1 { font-size: clamp(43px, 12.5vw, 69px); }
+  .lodha-index { left: 17px; bottom: 21px; }
+  .lodha-frame-readout { right: 18px; bottom: 21px; }
+  .lodha-preloader { padding: 22px 18px; }
+  .lodha-loader-center { padding-left: 24px; }
+  .lodha-loader-center strong { font-size: clamp(76px, 26vw, 125px); }
+  .lodha-loader-footer { grid-template-columns: 1fr; gap: 10px; }
+  .lodha-loader-footer span:last-child { display: none; }
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    font-family: "Space Grotesk", sans-serif;
-    text-rendering: optimizeLegibility;
-  }
-
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
-  a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
-    @apply cursor-pointer;
-  }
-}
-
-@layer components {
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .flex {
-    min-height: 0;
-    min-width: 0;
-  }
-
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      max-width: 1280px;
-    }
-  }
-}
-
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .hero-reveal {
-    animation: reveal-up 700ms cubic-bezier(0.23, 1, 0.32, 1) both;
-  }
-}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .lodha-copy { animation: none; } .lodha-preloader { transition: none; } }
